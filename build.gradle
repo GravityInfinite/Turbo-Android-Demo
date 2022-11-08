@@ -1,0 +1,74 @@
+apply from: rootProject.file('deps_config.gradle')
+
+buildscript {
+    repositories {
+        maven { url 'https://maven.aliyun.com/repository/public' }
+        google()
+        jcenter()
+        maven { url 'https://repo1.maven.org/maven2/' }
+        maven { url 'https://developer.huawei.com/repo/' }
+        maven { url "https://jitpack.io" }
+        maven {
+            url 'https://artifact.bytedance.com/repository/pangle'
+        }
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+
+    ext {
+        kotlinVersion = '1.4.31'
+        gradleVersion = '4.1.2'
+    }
+
+    dependencies {
+        classpath "com.android.tools.build:gradle:$gradleVersion"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
+        classpath 'com.huawei.agconnect:agcp:1.4.2.300'
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
+        classpath 'com.github.pengxurui:EasyPrivacy:v1.0.5'
+    }
+}
+
+allprojects {
+    repositories {
+        flatDir {
+            dirs 'ad_libs'
+        }
+        maven { url 'https://maven.aliyun.com/repository/public' }
+        google()
+        jcenter()
+        maven { url 'https://repo1.maven.org/maven2/' }
+        maven {
+            url 'https://nexus.gravity-engine.com/repository/maven-releases/'
+        }
+        maven {
+            url 'https://nexus.gravity-engine.com/repository/maven-snapshots/'
+        }
+        maven { url 'https://developer.huawei.com/repo/' }
+        maven { url 'https://repo1.maven.org/maven2/' }
+        maven { url "https://jitpack.io" }
+        maven {
+            url 'https://artifact.bytedance.com/repository/pangle'
+        }
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
+
+allprojects {
+
+    task allPublishToMavenLocal {
+        subprojects.each { if (!it.name.equals("app")) dependsOn("${it.name}:publishToMavenLocal") }
+    }
+
+    task allPublish {
+        subprojects.each { if (!it.name.equals("app")) dependsOn("${it.name}:uploadArchives") }
+    }
+}

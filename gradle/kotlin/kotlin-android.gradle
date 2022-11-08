@@ -1,0 +1,12 @@
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+
+android {
+    compileOptions {
+        // 允许jvm-default
+        kotlinOptions {
+            jvmTarget = JavaVersion.VERSION_1_8
+            freeCompilerArgs = ["-Xjvm-default=enable"]
+        }
+    }
+}

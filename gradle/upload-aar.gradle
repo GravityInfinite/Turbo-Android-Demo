@@ -1,0 +1,105 @@
+apply plugin: 'maven'
+
+/**
+ * 这个gradle必须在子module的build gradle中调用
+ */
+
+//task androidSourcesJar(type: Jar) {
+//    archiveClassifier.set('sources')
+//    from android.sourceSets.main.java.srcDirs
+//}
+//
+//artifacts {
+//    archives androidSourcesJar
+//}
+
+uploadArchives { //新增 ，因为Android Studio gradle 支持maven插件，所以可以添加此task
+    repositories {
+        mavenDeployer {
+            snapshotRepository(url: MAVEN_REPO_SNAPSHOT_URL) {
+                authentication(userName: NEXUS_USERNAME, password: NEXUS_PASSWORD)
+            }
+
+            repository(url: MAVEN_REPO_RELEASE_URL) {
+                authentication(userName: NEXUS_USERNAME, password: NEXUS_PASSWORD)
+            }
+            def projectVersion
+            switch (project.name) {
+                case "base-core":
+                    projectVersion = BASE_VERSION
+                    break
+                case "guard":
+                    projectVersion = GUARD_VERSION
+                    break
+                case "push":
+                    projectVersion = PUSH_VERSION
+//                    mustRunAfter(":base-core:uploadArchives")
+//                    dependsOn(":base-core:uploadArchives")
+                    break
+                case "turbo":
+//                    mustRunAfter(":base-core:uploadArchives")
+//                    dependsOn(":base-core:uploadArchives")
+                    projectVersion = TURBO_VERSION
+                    break
+                case "ablab":
+//                    mustRunAfter(":base-core:uploadArchives")
+//                    dependsOn(":base-core:uploadArchives")
+                    projectVersion = ABLAB_VERSION
+                    break
+                case "admore":
+//                    mustRunAfter(":turbo:uploadArchives")
+//                    dependsOn(":turbo:uploadArchives")
+                    projectVersion = ADMORE_VERSION
+                    break
+                case "admore-bridge-cocos":
+//                    mustRunAfter(":admore:uploadArchives")
+//                    dependsOn(":admore:uploadArchives")
+                    projectVersion = ADMORE_BRIDGE_COCOS_VERSION
+                    break
+                case "admore-bridge-unity":
+//                    mustRunAfter(":admore:uploadArchives")
+//                    dependsOn(":admore:uploadArchives")
+                    projectVersion = ADMORE_BRIDGE_UNITY_VERSION
+                    break
+                case "admore-adapter-gdt":
+//                    mustRunAfter(":admore:uploadArchives")
+//                    dependsOn(":admore:uploadArchives")
+                    projectVersion = ADMORE_ADAPTER_GDT_VERSION
+                    break
+                case "admore-adapter-pangle":
+//                    mustRunAfter(":admore:uploadArchives")
+//                    dependsOn(":admore:uploadArchives")
+                    projectVersion = ADMORE_ADAPTER_CSJ_VERSION
+                    break
+                case "admore-adapter-kuaishou":
+//                    mustRunAfter(":admore:uploadArchives")
+//                    dependsOn(":admore:uploadArchives")
+                    projectVersion = ADMORE_ADAPTER_KS_VERSION
+                    break
+                case "admore-adapter-gromore":
+//                    mustRunAfter(":admore:uploadArchives")
+//                    dependsOn(":admore:uploadArchives")
+                    projectVersion = ADMORE_ADAPTER_GROMORE_VERSION
+                    break
+                case "admore-adapter-mintegral":
+//                    mustRunAfter(":admore:uploadArchives")
+//                    dependsOn(":admore:uploadArchives")
+                    projectVersion = ADMORE_ADAPTER_MINTEGRAL_VERSION
+                    break
+                case "admore-adapter-baidu":
+//                    mustRunAfter(":admore:uploadArchives")
+//                    dependsOn(":admore:uploadArchives")
+                    projectVersion = ADMORE_ADAPTER_BAIDU_VERSION
+                    break
+            }
+            println("current aar version : ${projectVersion}")
+            pom.project {
+                version projectVersion
+                artifactId project.name
+                groupId GROUP
+                packaging 'aar'
+                description 'update aar lib'
+            }
+        }
+    }
+}

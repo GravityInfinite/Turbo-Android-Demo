@@ -1,0 +1,26 @@
+ext {
+    android = [compileSdkVersion: 28,
+               buildToolsVersion: "30.0.3",
+               minSdkVersion    : 21,
+               targetSdkVersion : 28,]
+
+    depsVersion = [
+            appCompat : "1.2.0",
+            kotlinKtx : "1.3.2",
+            lifecycle : "2.3.0",
+            retrofit  : "2.9.0",
+            coroutines: "2.9.0",
+    ]
+
+    depsLibs = [
+            kotlin               : "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion",
+            appCompat            : "androidx.appcompat:appcompat:$depsVersion.appCompat",
+            kotlinKtx            : "androidx.core:core-ktx:$depsVersion.kotlinKtx",
+            liveDataKtx          : "androidx.lifecycle:lifecycle-livedata-ktx:$depsVersion.lifecycle",
+            liveDataCoreKtx      : "androidx.lifecycle:lifecycle-livedata-core-ktx:$depsVersion.lifecycle",
+            lifecycleRuntimeKtx  : "androidx.lifecycle:lifecycle-runtime-ktx:$depsVersion.lifecycle",
+            lifecycleViewModelKtx: "androidx.lifecycle:lifecycle-viewmodel-ktx:$depsVersion.lifecycle",
+            retrofit             : "com.squareup.retrofit2:retrofit:$depsVersion.retrofit",
+            retrofitConverterGson: "com.squareup.retrofit2:converter-gson:$depsVersion.retrofit"
+    ]
+}
