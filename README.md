@@ -133,19 +133,82 @@ public class App extends MultiDexApplication {
 
 ```java
     /**
-     * 处理关键行为上报
-     * @param eventType 关键行为类型 分为
-        激活 activate
-        注册 register
-        付费 pay
-        次留 twice
-        关键行为 key_active
-     * @see com.plutus.common.turbo.beans.HandleEventType
+     * 埋点事件上报
+     * @param {string} eventType 埋点事件类型 分为
+            activate                          激活
+            register                          注册
+            pay                               付费
+            twice                             次留
+            key_active                        关键行为
+     @see com.plutus.common.turbo.beans.HandleEventType
+     * @param properties          eventType=pay时必填，为JsonObject，包含以下字段
+            amount:                           原价金额,单位为分
+            real_amount:                      实际付款金额,单位为分
+     * @param {boolean} isUseClientTime  是否使用上报的timestamp作为回传时间，默认为false，当为true时，timestamp必填
+     * @param {number} timestamp  事件发生时间，用来回传给广告平台，毫秒时间戳(只有在`isUseClientTime`为`true`时才需要传入)
+     * @param {string} traceId   本次事件的唯一id（重复上报会根据该id去重，traceId的长度不能超过128），可填入订单id，请求id等唯一值。如果为空，turbo则会自动生成一个。
      */
-    Turbo.get().handleEvent(HandleEventType.PAY);
+    Turbo.get().handleEvent(HandleEventType.PAY, properties, 0, false, null);
 ```
 
-#### 2.5 用户注册事件上报
+
+#### 2.5 上报付费事件
+
+当用户发生付费行为时，需要调用 `trackPayEvent` 方法记录用户付费事件，此事件非常重要，会影响买量和ROI统计，请务必重点测试
+
+```java
+    /**
+ * 上报付费事件
+ * @param payAmount     付费金额 单位为分
+ * @param payType       付费类型 按照国际标准组织ISO 4217中规范的3位字母，例如CNY人民币、USD美金等
+ * @param orderId       订单号
+ * @param payReason     付费原因 例如：购买钻石、办理月卡
+ * @param payMethod     付费方式 例如：支付宝、微信、银联等
+ * @param isFirstPay    是否首次付费
+ */
+Turbo.get().trackPayEvent(300, "CNY", "order_id" + System.currentTimeMillis(), "月卡", "支付宝", true);
+```
+
+#### 2.6 查询用户信息
+
+可以通过 `registerEvent` 方法查询当前用户的买量参数信息
+
+```java
+/**
+ * 查询用户信息，包括
+ * 1. client_id       用户ID
+ * 2. channel         用户渠道
+ * 3. click_company   用户买量来源，枚举值 为：tencent、bytedance、kuaishou  为空则为自然量用户
+ * 4. aid             广告计划ID
+ * 5. cid             广告创意ID
+ * 6. advertiser_id   广告账户ID
+ * 返回示例如下，具体可以打印返回的data查看
+ * "user_list": [
+ * {
+     * "create_time": "2022-09-09 14:50:04",
+     * "client_id": "Bn2RhTcU",
+     * "advertiser_id": "12948974294275",
+     * "channel": "wechat_mini_game",
+     * "click_company": "gdt",
+     * "aid": "65802182823",
+     * "cid": "65580218538",
+ * },
+ * ]
+ */
+Turbo.get().queryUserInfoAsync(new QueryUserInfoCallback() {
+    @Override
+    public void onFailed(String errorMsg) {
+        Log.e(TAG, "queryUserInfo onFailed " + errorMsg);
+    }
+
+    @Override
+    public void onSuccess(UserGetResponseBody.UserGetInfo userGetResponseBody) {
+        Log.d(TAG, "queryUserInfo onSuccess " + userGetResponseBody.toString());
+    }
+});
+```
+
+#### 2.7 用户注册事件上报
 
 当用户注册成功时，需要调用 `registerEvent` 方法记录用户注册事件
 
@@ -153,7 +216,7 @@ public class App extends MultiDexApplication {
 Turbo.get().trackAppRegisterEvent();
 ```
 
-#### 2.6 用户登录事件上报
+#### 2.8 用户登录事件上报
 
 当用户登录成功时，需要调用 `loginEvent` 方法记录用户登录事件
 
@@ -161,7 +224,7 @@ Turbo.get().trackAppRegisterEvent();
 Turbo.get().trackAppLoginEvent();
 ```
 
-#### 2.7 用户注销登录事件上报
+#### 2.9 用户注销登录事件上报
 
 当用户注销登录时，需要调用 `logoutEvent` 方法记录用户登出事件
 
@@ -169,7 +232,7 @@ Turbo.get().trackAppLoginEvent();
 Turbo.get().trackAppLogoutEvent();
 ```
 
-#### 2.8 设置事件公共属性
+#### 2.10 设置事件公共属性
 
 对于所有事件都需要添加的属性，可在初始化 SDK 前，调用 `registerSuperProperties()` 将属性注册为公共属性：
 
@@ -186,7 +249,7 @@ Turbo.get().registerSuperProperties(jsonObject);
 
 > 📢 注意：公共属性需要先在`引力引擎后台-->管理中心-->元数据-->事件属性`中添加，否则会上报失败。
 
-#### 2.9 代码埋点追踪自定义事件
+#### 2.11 代码埋点追踪自定义事件
 
 在文件顶部使用 import 引入 SDK 文件，然后调用 `track()` 方法，可以记录用户自定义事件。
 
@@ -263,6 +326,30 @@ Turbo.get().profileDelete();
 ```java
 // 将某个用户的某些属性值设置为空
 Turbo.get().profileUnset("$name");
+```
+
+### 4. 广告相关事件收集
+```java
+/**
+ * 上报广告事件 参数如下
+ * @param adPlacementId 广告瀑布流ID
+ * @param adSourceId    广告源ID
+ * @param adType        广告类型 （取值为：reward、banner、 native 、interstitial、 splash ，分别对应激励视频广告、横幅广告、信息流广告、插屏广告、开屏广告）
+ * @param adnType       广告平台类型（取值为：csj、gdt、ks、 mint 、baidu，分别对应为穿山甲、优量汇、快手联盟、Mintegral、百度联盟）
+ * @param ecpm          预估ECPM价格（单位为元）
+ * @param duration      广告播放时长（单位为秒）
+ * @param isPlayOver    广告是否播放完毕
+ */
+// 上报广告加载事件
+Turbo.get().trackAdLoadEvent("placement_id", "ad_source_id", "reward", "csj");
+// 上报广告展示事件
+Turbo.get().trackAdShowEvent("placement_id", "ad_source_id", "reward", "csj", 1);
+// 上报广告点击事件
+Turbo.get().trackAdClickEvent("placement_id", "ad_source_id", "reward", "csj", 1);
+// 上报广告开始播放事件
+Turbo.get().trackAdPlayStartEvent("placement_id", "ad_source_id", "reward", "csj", 1);
+// 上报广告播放完成事件
+Turbo.get().trackAdPlayEndEvent("placement_id", "ad_source_id", "reward", "csj", 1, 50, false);
 ```
 
 #### License

@@ -28,8 +28,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="10dp"
-                android:onClick="ad"
-                android:text="ad" />
+                android:onClick="trackAdEvent"
+                android:text="track_ad_event" />
 
             <Button
                 android:layout_width="wrap_content"
@@ -38,6 +38,22 @@
                 android:layout_marginTop="10dp"
                 android:onClick="handle_event"
                 android:text="handle_event" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:onClick="queryUserInfo"
+                android:text="query_user_info" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:onClick="trackPayEvent"
+                android:text="track_pay_event" />
 
             <Button
                 android:layout_width="wrap_content"

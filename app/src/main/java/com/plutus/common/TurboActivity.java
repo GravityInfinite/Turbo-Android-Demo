@@ -6,14 +6,11 @@ import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.plutus.common.core.utils.ApkUtils;
-import com.plutus.common.core.utils.PLog;
-import com.plutus.common.core.utils.SystemUtil;
-import com.plutus.common.core.utils.TimeUtils;
+import com.google.gson.JsonObject;
 import com.plutus.common.turbo.Turbo;
-import com.plutus.common.turbo.beans.AdUnionType;
-import com.plutus.common.turbo.beans.AdnType;
 import com.plutus.common.turbo.beans.HandleEventType;
+import com.plutus.common.turbo.beans.UserGetResponseBody;
+import com.plutus.common.turbo.callback.QueryUserInfoCallback;
 import com.plutus.common.turbo.callback.RegisterCallback;
 
 import org.json.JSONException;
@@ -33,13 +30,13 @@ public class TurboActivity extends AppCompatActivity {
     }
 
     /**
-     * 注册turbo平台账号，只调用一次即可
+     * 注册turbo平台账号，只调用一次
      *
      * @param view
      */
     public void register(View view) {
         Log.d(TAG, " status " + Turbo.get().isRegisterSuccess());
-        Turbo.get().register("test_client_id_android_qmkfd", "testUser", "baseChannel", 1, new RegisterCallback() {
+        Turbo.get().register("test_client_id_android_qmkfd", "testUser", "base", 1, new RegisterCallback() {
             @Override
             public void onFailed(String errorMsg) {
                 Log.d(TAG, "register failed " + errorMsg);
@@ -54,12 +51,24 @@ public class TurboActivity extends AppCompatActivity {
     }
 
     /**
-     * 上报广告事件，取值如下：
+     * 上报广告相关事件
      *
      * @param view
      */
-    public void ad(View view) {
-        Turbo.get().ad(0, AdnType.CSJ, "test_placement_id", "test_adsource_id", 100d, AdUnionType.ADMORE);
+    public void trackAdEvent(View view) {
+        /**
+         * 上报广告相关事件
+         */
+        // 上报广告加载事件
+        Turbo.get().trackAdLoadEvent("placement_id", "ad_source_id", "reward", "csj");
+        // 上报广告展示事件
+        Turbo.get().trackAdShowEvent("placement_id", "ad_source_id", "reward", "csj", 1);
+        // 上报广告点击事件
+        Turbo.get().trackAdClickEvent("placement_id", "ad_source_id", "reward", "csj", 1);
+        // 上报广告开始播放事件
+        Turbo.get().trackAdPlayStartEvent("placement_id", "ad_source_id", "reward", "csj", 1);
+        // 上报广告播放完成事件
+        Turbo.get().trackAdPlayEndEvent("placement_id", "ad_source_id", "reward", "csj", 1, 50, false);
     }
 
     /**
@@ -68,8 +77,38 @@ public class TurboActivity extends AppCompatActivity {
      * @param view
      */
     public void handle_event(View view) {
-        Turbo.get().handleEvent(HandleEventType.PAY);
-        Turbo.get().handleEvent(HandleEventType.REGISTER);
+        JsonObject properties = new JsonObject();
+        properties.addProperty("amount", 300);
+        properties.addProperty("real_amount", 300);
+        Turbo.get().handleEvent(HandleEventType.PAY, properties, 0, false, null);
+        Turbo.get().handleEvent(HandleEventType.REGISTER, null, 0, false, null);
+    }
+
+    /**
+     * 上报付费事件
+     * @param view
+     */
+    public void trackPayEvent(View view) {
+        Turbo.get().trackPayEvent(300, "CNY", "order_id" + System.currentTimeMillis(), "月卡", "支付宝", true);
+    }
+
+    /**
+     * 查询用户买量信息
+     *
+     * @param view
+     */
+    public void queryUserInfo(View view) {
+        Turbo.get().queryUserInfoAsync(new QueryUserInfoCallback() {
+            @Override
+            public void onFailed(String errorMsg) {
+                Log.e(TAG, "queryUserInfo onFailed " + errorMsg);
+            }
+
+            @Override
+            public void onSuccess(UserGetResponseBody.UserGetInfo userGetResponseBody) {
+                Log.d(TAG, "queryUserInfo onSuccess " + userGetResponseBody.toString());
+            }
+        });
     }
 
     /**
@@ -120,12 +159,12 @@ public class TurboActivity extends AppCompatActivity {
     }
 
     /**
-     * 记录初次设定的用户属性，比如记录用户首次访问时间
+     * 记录初次设定的用户属性，比如记录用户性别
      *
      * @param view
      */
     public void profileSetOnce(View view) {
-        Turbo.get().profileSetOnce("$first_visit_time", TimeUtils.formatTime(System.currentTimeMillis(), TimeUtils.YYYY_MM_DD_HH_MM_SS));
+        Turbo.get().profileSetOnce("$gender", "male");
     }
 
     /**
@@ -173,8 +212,6 @@ public class TurboActivity extends AppCompatActivity {
      * @param view
      */
     public void track(View view) {
-        Log.d(TAG, "is debug" + ApkUtils.isDebug());
-        PLog.INSTANCE.d("track");
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("guild_id", "100");
