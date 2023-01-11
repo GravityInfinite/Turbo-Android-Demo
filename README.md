@@ -332,6 +332,7 @@ Turbo.get().profileUnset("$name");
 ```java
 /**
  * 上报广告事件 参数如下
+ * @param adUnionType   广告聚合平台类型  （取值为：topon、gromore、admore、self，分别对应Topon、Gromore、Admore、自建聚合）
  * @param adPlacementId 广告瀑布流ID
  * @param adSourceId    广告源ID
  * @param adType        广告类型 （取值为：reward、banner、 native 、interstitial、 splash ，分别对应激励视频广告、横幅广告、信息流广告、插屏广告、开屏广告）
@@ -341,15 +342,15 @@ Turbo.get().profileUnset("$name");
  * @param isPlayOver    广告是否播放完毕
  */
 // 上报广告加载事件
-Turbo.get().trackAdLoadEvent("placement_id", "ad_source_id", "reward", "csj");
+Turbo.get().trackAdLoadEvent("topon", "placement_id", "ad_source_id", "reward", "csj");
 // 上报广告展示事件
-Turbo.get().trackAdShowEvent("placement_id", "ad_source_id", "reward", "csj", 1);
+Turbo.get().trackAdShowEvent("topon", "placement_id", "ad_source_id", "reward", "csj", 1);
 // 上报广告点击事件
-Turbo.get().trackAdClickEvent("placement_id", "ad_source_id", "reward", "csj", 1);
+Turbo.get().trackAdClickEvent("topon", "placement_id", "ad_source_id", "reward", "csj", 1);
 // 上报广告开始播放事件
-Turbo.get().trackAdPlayStartEvent("placement_id", "ad_source_id", "reward", "csj", 1);
+Turbo.get().trackAdPlayStartEvent("topon", "placement_id", "ad_source_id", "reward", "csj", 1);
 // 上报广告播放完成事件
-Turbo.get().trackAdPlayEndEvent("placement_id", "ad_source_id", "reward", "csj", 1, 50, false);
+Turbo.get().trackAdPlayEndEvent("topon", "placement_id", "ad_source_id", "reward", "csj", 1, 50, false);
 ```
 
 #### License

@@ -60,15 +60,15 @@ public class TurboActivity extends AppCompatActivity {
          * 上报广告相关事件
          */
         // 上报广告加载事件
-        Turbo.get().trackAdLoadEvent("placement_id", "ad_source_id", "reward", "csj");
+        Turbo.get().trackAdLoadEvent("topon", "placement_id", "ad_source_id", "reward", "csj");
         // 上报广告展示事件
-        Turbo.get().trackAdShowEvent("placement_id", "ad_source_id", "reward", "csj", 1);
+        Turbo.get().trackAdShowEvent("topon", "placement_id", "ad_source_id", "reward", "csj", 1);
         // 上报广告点击事件
-        Turbo.get().trackAdClickEvent("placement_id", "ad_source_id", "reward", "csj", 1);
+        Turbo.get().trackAdClickEvent("topon", "placement_id", "ad_source_id", "reward", "csj", 1);
         // 上报广告开始播放事件
-        Turbo.get().trackAdPlayStartEvent("placement_id", "ad_source_id", "reward", "csj", 1);
+        Turbo.get().trackAdPlayStartEvent("topon", "placement_id", "ad_source_id", "reward", "csj", 1);
         // 上报广告播放完成事件
-        Turbo.get().trackAdPlayEndEvent("placement_id", "ad_source_id", "reward", "csj", 1, 50, false);
+        Turbo.get().trackAdPlayEndEvent("topon", "placement_id", "ad_source_id", "reward", "csj", 1, 50, false);
     }
 
     /**
@@ -86,6 +86,7 @@ public class TurboActivity extends AppCompatActivity {
 
     /**
      * 上报付费事件
+     *
      * @param view
      */
     public void trackPayEvent(View view) {
