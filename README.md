@@ -1,6 +1,6 @@
 # Android SDK 接入
 
-本文档为**Android**接入 [turbo 引力引擎](https://gravity-engine.com/)的技术接入方案，具体 Demo 请参考[GitHub](https://github.com/GravityInfinite/Turbo-Android-Demo)。
+本文档为**Android**接入 [引力引擎](https://gravity-engine.com/)的技术接入方案，具体 Demo 请参考[GitHub](https://github.com/GravityInfinite/Turbo-Android-Demo)。
 
 ### 1. 集成引力引擎 SDK
 
@@ -22,7 +22,8 @@ maven { url "https://jitpack.io" }
 implementation "com.plutus.common:turbo:${LATEST_VERSION}"
 ```
 
-> 📢 注意：LATEST_VERSION 请参见[发版记录页](turbo-integrated/android/changelog.md)
+> [!Tip]
+> LATEST_VERSION 请参见[发版记录页](turbo-integrated/android/changelog.md)
 
 #### 1.3 添加混淆
 
@@ -127,34 +128,9 @@ public class App extends MultiDexApplication {
     });
 ```
 
-#### 2.4 上报买量关键行为
+#### 2.4 上报付费事件
 
-当发生以下买量节点事件时，通过 `handleEvent` 方法上报事件
-
-```java
-    /**
-     * 埋点事件上报
-     * @param {string} eventType 埋点事件类型 分为
-            activate                          激活
-            register                          注册
-            pay                               付费
-            twice                             次留
-            key_active                        关键行为
-     @see com.plutus.common.turbo.beans.HandleEventType
-     * @param properties          eventType=pay时必填，为JsonObject，包含以下字段
-            amount:                           原价金额,单位为分
-            real_amount:                      实际付款金额,单位为分
-     * @param {boolean} isUseClientTime  是否使用上报的timestamp作为回传时间，默认为false，当为true时，timestamp必填
-     * @param {number} timestamp  事件发生时间，用来回传给广告平台，毫秒时间戳(只有在`isUseClientTime`为`true`时才需要传入)
-     * @param {string} traceId   本次事件的唯一id（重复上报会根据该id去重，traceId的长度不能超过128），可填入订单id，请求id等唯一值。如果为空，turbo则会自动生成一个。
-     */
-    Turbo.get().handleEvent(HandleEventType.PAY, properties, 0, false, null);
-```
-
-
-#### 2.5 上报付费事件
-
-当用户发生付费行为时，需要调用 `trackPayEvent` 方法记录用户付费事件，此事件非常重要，会影响买量和ROI统计，请务必重点测试
+当用户发生付费行为时，需要调用 `trackPayEvent` 方法记录用户付费事件，此事件非常重要，会影响买量和 ROI 统计，请务必重点测试
 
 ```java
     /**
@@ -169,7 +145,7 @@ public class App extends MultiDexApplication {
 Turbo.get().trackPayEvent(300, "CNY", "order_id" + System.currentTimeMillis(), "月卡", "支付宝", true);
 ```
 
-#### 2.6 查询用户信息
+#### 2.5 查询用户信息
 
 可以通过 `registerEvent` 方法查询当前用户的买量参数信息
 
@@ -208,7 +184,7 @@ Turbo.get().queryUserInfoAsync(new QueryUserInfoCallback() {
 });
 ```
 
-#### 2.7 用户注册事件上报
+#### 2.6 用户注册事件上报
 
 当用户注册成功时，需要调用 `registerEvent` 方法记录用户注册事件
 
@@ -216,7 +192,7 @@ Turbo.get().queryUserInfoAsync(new QueryUserInfoCallback() {
 Turbo.get().trackAppRegisterEvent();
 ```
 
-#### 2.8 用户登录事件上报
+#### 2.7 用户登录事件上报
 
 当用户登录成功时，需要调用 `loginEvent` 方法记录用户登录事件
 
@@ -224,7 +200,7 @@ Turbo.get().trackAppRegisterEvent();
 Turbo.get().trackAppLoginEvent();
 ```
 
-#### 2.9 用户注销登录事件上报
+#### 2.8 用户注销登录事件上报
 
 当用户注销登录时，需要调用 `logoutEvent` 方法记录用户登出事件
 
@@ -232,7 +208,7 @@ Turbo.get().trackAppLoginEvent();
 Turbo.get().trackAppLogoutEvent();
 ```
 
-#### 2.10 设置事件公共属性
+#### 2.9 设置事件公共属性
 
 对于所有事件都需要添加的属性，可在初始化 SDK 前，调用 `registerSuperProperties()` 将属性注册为公共属性：
 
@@ -247,9 +223,10 @@ try {
 Turbo.get().registerSuperProperties(jsonObject);
 ```
 
-> 📢 注意：公共属性需要先在`引力引擎后台-->管理中心-->元数据-->事件属性`中添加，否则会上报失败。
+> [!WARNING]
+> 公共属性需要先在`引力引擎后台-->管理中心-->元数据-->事件属性`中添加，否则会上报失败!
 
-#### 2.11 代码埋点追踪自定义事件
+#### 2.10 代码埋点追踪自定义事件
 
 在文件顶部使用 import 引入 SDK 文件，然后调用 `track()` 方法，可以记录用户自定义事件。
 
@@ -329,6 +306,7 @@ Turbo.get().profileUnset("$name");
 ```
 
 ### 4. 广告相关事件收集
+
 ```java
 /**
  * 上报广告事件 参数如下
@@ -352,7 +330,3 @@ Turbo.get().trackAdPlayStartEvent("topon", "placement_id", "ad_source_id", "rewa
 // 上报广告播放完成事件
 Turbo.get().trackAdPlayEndEvent("topon", "placement_id", "ad_source_id", "reward", "csj", 1, 50, false);
 ```
-
-#### License
-
-Under BSD license，you can check out the license file
