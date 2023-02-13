@@ -48,9 +48,9 @@ public class App extends MultiDexApplication {
         // 调用onAttachBaseContext
         /**
          *       context attachBaseContext传递过来的Context参数
-                 isDebug 当前是否为debug模式，上线之后务必传递为false
-                 buildType 当前build type，例如：BuildConfig.BUILD_TYPE，如果想要开启debug模式，这里需要传入debug
-                 Flavor 当前build flavor，例如：”vip” 非必填
+         isDebug 当前是否为debug模式，上线之后务必传递为false
+         buildType 当前build type，例如：BuildConfig.BUILD_TYPE，如果想要开启debug模式，这里需要传入debug
+         Flavor 当前build flavor，例如：”vip” 非必填
          */
         boolean isDebug = true; // 调试阶段打开可以输出部分日志信息，线上请不要开启，会影响性能
         String buildType = isDebug ? "debug" : "release";
@@ -69,16 +69,19 @@ public class App extends MultiDexApplication {
 
 ```java
     /**
-     * 在应用的onCreate方法中调用，此方法会初始化Turbo需要的基础参数
-     * @param aesKey        加密
-     * @param accessToken   项目通行证
-     * @param isAgreePrivacy 是否同意隐私弹窗
+     * 在应用的onCreate方法中调用，此方法会初始化 引力引擎 需要的基础参数
+     * @param aesKey                加解密秘钥
+     * @param accessToken           项目通行证
+     * @param isAgreePrivacy        是否同意隐私弹窗
      */
     // 请尽可能的早调用，暂时只支持使用默认配置
     TurboConfigOptions configOptions = new TurboConfigOptions();
     // 必须每次启动都调用，建议在用户同意隐私政策弹窗之后，传入isAgreePrivacy参数为true
     Turbo.get().init("k7ZjSgc1Z8j551UJUNLlWA==", "x5emsWAxqnlwqpDH1j4bbicR8igmhruT", true, configOptions);
 ```
+
+> [!Tip]
+> aesKey 和 accessToken 均可以在 [引力引擎后台](https://web.gravity-engine.com/#/manage/appmanage) 获取
 
 #### 2.3 用户注册
 
@@ -330,3 +333,17 @@ Turbo.get().trackAdPlayStartEvent("topon", "placement_id", "ad_source_id", "rewa
 // 上报广告播放完成事件
 Turbo.get().trackAdPlayEndEvent("topon", "placement_id", "ad_source_id", "reward", "csj", 1, 50, false);
 ```
+
+### 5. 其他配置
+
+#### 5.1 开启 Debug 模式
+
+SDK 支持在两种模式下运行：
+
+- Release: 线上模式，数据会存入缓存，并依据一定的缓存策略上报
+- Debug: 测试模式，数据逐条上报。当出现问题时会以日志和异常的方式提示用户，您也可以去`引力网站后台--管理中心--元数据--事件流`中查看实时上报的数据数，辅助您判断数据接入是否正常。
+
+关于如何开启 Debug 模式，请您参考 [配置 SDK 的基础环境](#_21-配置-sdk-的基础环境) 一节。
+
+> [!WARNING]
+> DEBUG 模式仅仅用于集成阶段数据校验，不要在生产模式下使用！
