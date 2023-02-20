@@ -117,6 +117,14 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="10dp"
+                android:onClick="profileUniqAppend"
+                android:text="profile_uniq_Append" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
                 android:onClick="profileUnset"
                 android:text="profile_Unset" />
 

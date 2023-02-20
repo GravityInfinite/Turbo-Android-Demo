@@ -190,6 +190,18 @@ public class TurboActivity extends AppCompatActivity {
     }
 
     /**
+     * 列表类型的属性，可以去重append
+     *
+     * @param view
+     */
+    public void profileUniqAppend(View view) {
+        Set<String> movies = new HashSet<>();
+        movies.add("Interstellar");
+        movies.add("The Negro Motorist Green Book");
+        Turbo.get().profileUniqAppend("Movies", movies);
+    }
+
+    /**
      * 属性取消
      *
      * @param view
