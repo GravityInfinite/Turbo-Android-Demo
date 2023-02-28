@@ -178,6 +178,24 @@ public class TurboActivity extends AppCompatActivity {
     }
 
     /**
+     * 数值类型的属性取最大值
+     *
+     * @param view
+     */
+    public void profileNumberMax(View view) {
+        Turbo.get().profileNumberMax("ad_ecpm_max", 300);
+    }
+
+    /**
+     * 数值类型的属性取最小值
+     *
+     * @param view
+     */
+    public void profileNumberMin(View view) {
+        Turbo.get().profileNumberMin("ad_ecpm_min", 100);
+    }
+
+    /**
      * 列表类型的属性，可以直接append
      *
      * @param view
