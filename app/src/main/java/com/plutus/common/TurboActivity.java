@@ -36,7 +36,7 @@ public class TurboActivity extends AppCompatActivity {
      */
     public void register(View view) {
         Log.d(TAG, " status " + Turbo.get().isRegisterSuccess());
-        Turbo.get().register("test_client_id_android_qmkfd", "testUser", "base", 1, new RegisterCallback() {
+        Turbo.get().register("test_client_id_android_qmkfd", "testUser", "base", new RegisterCallback() {
             @Override
             public void onFailed(String errorMsg) {
                 Log.d(TAG, "register failed " + errorMsg);
@@ -48,6 +48,14 @@ public class TurboActivity extends AppCompatActivity {
                 Log.d(TAG, " status " + Turbo.get().isRegisterSuccess());
             }
         });
+    }
+
+    /**
+     * 用户登出，会清空本地用户缓存的数据，并上报注销登录事件
+     * @param view
+     */
+    public void logout(View view) {
+        Turbo.get().logout();
     }
 
     /**
@@ -69,19 +77,6 @@ public class TurboActivity extends AppCompatActivity {
         Turbo.get().trackAdPlayStartEvent("topon", "placement_id", "ad_source_id", "reward", "csj", 1);
         // 上报广告播放完成事件
         Turbo.get().trackAdPlayEndEvent("topon", "placement_id", "ad_source_id", "reward", "csj", 1, 50, false);
-    }
-
-    /**
-     * 上报买量关键行为事件
-     *
-     * @param view
-     */
-    public void handle_event(View view) {
-        JsonObject properties = new JsonObject();
-        properties.addProperty("amount", 300);
-        properties.addProperty("real_amount", 300);
-        Turbo.get().handleEvent(HandleEventType.PAY, properties, 0, false, null);
-        Turbo.get().handleEvent(HandleEventType.REGISTER, null, 0, false, null);
     }
 
     /**
