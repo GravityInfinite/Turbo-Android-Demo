@@ -23,7 +23,6 @@ public class SplashActivity extends AppCompatActivity implements EasyPermissions
     private static final String TAG = "SplashActivity";
     private boolean isColdStart = true; // 是否为冷启动
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,7 +84,7 @@ public class SplashActivity extends AppCompatActivity implements EasyPermissions
     }
 
     private void allPermissionGranted() {
-        startActivity(new Intent(SplashActivity.this, TurboActivity.class));
+        startActivity(new Intent(SplashActivity.this, MainActivity.class));
         SplashActivity.this.finish();
     }
 
