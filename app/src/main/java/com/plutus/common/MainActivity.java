@@ -1,5 +1,6 @@
 package com.plutus.common;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -16,9 +17,10 @@ import java.util.List;
 import cn.gravity.android.GravityEngineSDK;
 import cn.gravity.android.GravityEngineTrackEvent;
 import cn.gravity.android.RegisterCallback;
+import cn.gravity.android.ScreenAutoTracker;
 import cn.gravity.android.utils.GELog;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ScreenAutoTracker {
 
     private static final String TAG = "MainActivity";
     @Override
@@ -261,5 +263,20 @@ public class MainActivity extends AppCompatActivity {
      */
     public void flush(View view) {
         GravityEngineHelper.getInstance().flush();
+    }
+
+    public void clickTest(View view) {
+        Intent intent = new Intent(this, ClickTestActivity.class);
+        startActivity(intent);
+    }
+
+    @Override
+    public String getScreenUrl() {
+        return "gravityengine://page/main";
+    }
+
+    @Override
+    public JSONObject getTrackProperties() {
+        return null;
     }
 }

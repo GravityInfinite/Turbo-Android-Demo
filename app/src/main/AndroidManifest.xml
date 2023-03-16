@@ -83,6 +83,12 @@
             android:exported="false" >
         </activity>
 
+        <activity
+            android:name=".ClickTestActivity"
+            android:label="@string/title_activity_click_test"
+            android:theme="@style/AppTheme.NoActionBar" >
+        </activity>
+
     </application>
 
 </manifest>

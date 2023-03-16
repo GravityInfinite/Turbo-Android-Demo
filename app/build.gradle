@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'com.pengxr.easyprivacy'
+    id'cn.gravity.android'
 }
 
 android {
@@ -56,6 +57,19 @@ repositories {
     maven { url "https://jitpack.io" }
 }
 
+GravityEngineSDK {
+    // 打开编译日志
+    debug = false
+    //是否允许扫描jar
+    disableJar = false
+    //是否扫描指定的类，默认全部扫描
+    useInclude = false
+    //指定的类列表，useInclude为true时有效
+    include = []
+    //指定排除的类列表，useInclude为false时有效
+    exclude = []
+}
+
 dependencies {
     implementation rootProject.depsLibs.appCompat
     implementation 'androidx.appcompat:appcompat:1.0.2'
@@ -64,7 +78,7 @@ dependencies {
     implementation 'com.google.android.material:material:1.0.0'
     implementation 'androidx.vectordrawable:vectordrawable:1.0.1'
 
-    implementation "cn.gravity.android:GravityEngineSDK:4.1.3" // 最新版本见发版记录页
+    implementation "cn.gravity.android:GravityEngineSDK:4.1.5" // 最新版本见发版记录页
 
     implementation 'com.android.support:multidex:1.0.3'
     implementation 'pub.devrel:easypermissions:3.0.0'
