@@ -25,9 +25,7 @@ public class GravityEngineHelper {
         if (isDebug) {
             config.setMode(GEConfig.ModeEnum.DEBUG);
         }
-        config.setAesKey(GravityEngineConstants.AES_KEY);
-        config.setMultiProcess(true);
-        mInstance = GravityEngineSDK.sharedInstance(config);
+        mInstance = GravityEngineSDK.setupAndStart(config);
         enableAutoTrack();
     }
 

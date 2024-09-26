@@ -15,8 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.gravity.android.GravityEngineSDK;
-import cn.gravity.android.GravityEngineTrackEvent;
-import cn.gravity.android.RegisterCallback;
+import cn.gravity.android.InitializeCallback;
 import cn.gravity.android.ScreenAutoTracker;
 import cn.gravity.android.utils.GELog;
 
@@ -34,20 +33,20 @@ public class MainActivity extends AppCompatActivity implements ScreenAutoTracker
      *
      * @param view
      */
-    public void register(View view) {
-        GELog.i(TAG, "register called");
-        GravityEngineHelper.getInstance().register(GravityEngineConstants.ACCESS_TOKEN, GravityEngineConstants.CLIENT_ID, GravityEngineConstants.USER_NAME, "base", new RegisterCallback() {
+    public void initialize(View view) {
+        GELog.i(TAG, "initialize called");
+        GravityEngineHelper.getInstance().initialize(GravityEngineConstants.ACCESS_TOKEN, GravityEngineConstants.CLIENT_ID, GravityEngineConstants.USER_NAME, "base", new InitializeCallback() {
+
             @Override
-            public void onFailed(String errorMsg) {
-                Log.d(TAG, "register failed " + errorMsg);
+            public void onFailed(String errorMsg, JSONObject initializeBody) {
+                Log.d(TAG, "initialize failed " + errorMsg);
             }
 
             @Override
-            public void onSuccess() {
-                Log.d(TAG, "register success");
-                Log.d(TAG, " status " + GravityEngineHelper.getInstance().isRegisterSuccess());
+            public void onSuccess(JSONObject responseJson, JSONObject initializeBody) {
+                Log.d(TAG, "initialize success");
             }
-        });
+        }, false);
     }
 
     /**
@@ -77,34 +76,7 @@ public class MainActivity extends AppCompatActivity implements ScreenAutoTracker
      * @param view
      */
     public void trackPayEvent(View view) {
-        GravityEngineHelper.getInstance().trackPayEvent(300, "CNY", "order_id" + System.currentTimeMillis(), "月卡", "支付宝", true);
-    }
-
-    /**
-     * 用户登录
-     * @param view
-     */
-    public void login(View view) {
-        // 设置账号ID
-        GravityEngineHelper.getInstance().login(GravityEngineConstants.CLIENT_ID);
-
-        // 设置用户属性
-        try {
-            JSONObject properties = new JSONObject();
-            properties.put("UserName", GravityEngineConstants.USER_NAME);
-            GravityEngineHelper.getInstance().user_set(properties);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * 退出登录
-     * @param view
-     */
-    @GravityEngineTrackEvent(eventName = "log_out", properties = "{\"paramString\":\"value\",\"paramNumber\":123,\"paramBoolean\":true}", appId = "debug-appid")
-    public void logout(View view) {
-        GravityEngineHelper.getInstance().logout();
+        GravityEngineHelper.getInstance().trackPayEvent(300, "CNY", "order_id" + System.currentTimeMillis(), "月卡", "支付宝");
     }
 
     /**
