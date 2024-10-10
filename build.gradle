@@ -44,9 +44,9 @@ allprojects {
             dirs 'ad_libs'
         }
         maven { url 'https://maven.aliyun.com/repository/public' }
+        mavenCentral()
         google()
         jcenter()
-        maven { url 'https://repo1.maven.org/maven2/' }
         maven {
             url 'https://nexus.gravity-engine.com/repository/maven-releases/'
         }
@@ -54,15 +54,9 @@ allprojects {
             url 'https://nexus.gravity-engine.com/repository/maven-snapshots/'
         }
         maven { url 'https://developer.huawei.com/repo/' }
-        maven { url 'https://repo1.maven.org/maven2/' }
-        maven { url "https://jitpack.io" }
         maven {
             url 'https://artifact.bytedance.com/repository/pangle'
         }
-        maven {
-            url "https://plugins.gradle.org/m2/"
-        }
-        maven { url "https://maven.google.com" }
     }
 }
 
