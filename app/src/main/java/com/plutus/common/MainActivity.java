@@ -35,16 +35,16 @@ public class MainActivity extends AppCompatActivity implements ScreenAutoTracker
      */
     public void initialize(View view) {
         GELog.i(TAG, "initialize called");
-        GravityEngineHelper.getInstance().initialize(GravityEngineConstants.ACCESS_TOKEN, GravityEngineConstants.CLIENT_ID, GravityEngineConstants.USER_NAME, "base", new InitializeCallback() {
-
+        GravityEngineHelper.getInstance().initialize(GravityEngineConstants.ACCESS_TOKEN, GravityEngineConstants.CLIENT_ID,GravityEngineConstants.USER_NAME, "base", new InitializeCallback() {
             @Override
             public void onFailed(String errorMsg, JSONObject initializeBody) {
-                Log.d(TAG, "initialize failed " + errorMsg);
+                Log.d(TAG, "initialize failed " + errorMsg + " with initialize body " + initializeBody);
             }
 
             @Override
             public void onSuccess(JSONObject responseJson, JSONObject initializeBody) {
-                Log.d(TAG, "initialize success");
+                Log.d(TAG, "initialize success with initialize body " + initializeBody);
+                Log.d(TAG, responseJson.toString());
             }
         }, false);
     }
