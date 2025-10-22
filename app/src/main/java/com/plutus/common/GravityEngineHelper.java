@@ -25,6 +25,10 @@ public class GravityEngineHelper {
         if (isDebug) {
             config.setMode(GEConfig.ModeEnum.DEBUG);
         }
+        config.enableAndroidId(false);
+        config.enableOAID(false);
+        config.enableIMEI(false);
+        config.enableMAC(false);
         mInstance = GravityEngineSDK.setupAndStart(config);
         enableAutoTrack();
     }

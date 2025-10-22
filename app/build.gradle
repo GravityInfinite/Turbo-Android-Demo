@@ -18,25 +18,6 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
-    signingConfigs {
-        debug {
-            keyAlias 'plutus'
-            keyPassword 'plutuscat6'
-            storeFile file('/Users/fei/dev/android/keystore.jks')
-            storePassword 'plutuscat6'
-            v1SigningEnabled true
-            v2SigningEnabled true
-        }
-        release {
-            keyAlias 'plutus'
-            keyPassword 'plutuscat6'
-            storeFile file('/Users/fei/dev/android/keystore.jks')
-            storePassword 'plutuscat6'
-            v1SigningEnabled true
-            v2SigningEnabled true
-        }
-    }
-
     buildTypes {
         release {
             minifyEnabled false
@@ -55,6 +36,8 @@ android {
 
 repositories {
     maven { url "https://jitpack.io" }
+    maven { url 'https://developer.huawei.com/repo' }
+    maven { url 'https://developer.hihonor.com/repo' }
 }
 
 GravityEngineSDK {
